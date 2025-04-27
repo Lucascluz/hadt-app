@@ -1,35 +1,30 @@
-import { View, Text } from 'react-native'
-import { Redirect, router, Tabs } from 'expo-router'
-import React from 'react'
-import { Icon, CircleIcon, MenuIcon, AddIcon } from "@/components/ui/icon"
-import { Fab, FabIcon, FabLabel } from '@/components/ui/fab'
+import { Fab, FabIcon } from '@/components/ui/fab';
+import { AddIcon } from '@/components/ui/icon';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { router, Tabs } from 'expo-router';
 
-const TabsLayout = () => {
-    return (
-        <>
-            <Fab
-                className="absolute mb-10 bg-blue-500 hover:bg-blue-700"
-                size="md"
-                placement="bottom right"
-                onPress={() => { router.push('./task/add') }}
-                >
-                <FabIcon className="color-white" as={AddIcon} />
-            </Fab>
-            <Tabs>
-                <Tabs.Screen name="dash" options={{
-                    title: 'Dash',
-                    headerShown: false,
-                    tabBarIcon: () => <Icon className="text-typography-500" as={CircleIcon} />,
-                }} />
-                <Tabs.Screen name="lists" options={{
-                    title: 'Lists',
-                    headerShown: false,
+export default function TabLayout() {
+  return (
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          headerShown: false,
+          animation: 'shift',
+          title: 'Dash',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="rocket" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="lists"
+        options={{
+          headerShown: false,
+          animation: 'shift',
+          title: 'Lists',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="list" color={color} />,
+        }}
+      />
 
-                    tabBarIcon: () => <Icon className="text-typography-500" as={MenuIcon} />,
-                }} />
-            </Tabs>
-        </>
-    )
+    </Tabs>
+  );
 }
-
-export default TabsLayout
