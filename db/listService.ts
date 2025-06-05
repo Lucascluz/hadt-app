@@ -1,6 +1,6 @@
 // import { List } from '@/types/list';
 import { List } from '@/types/list';
-import { CombinedTaskList } from '@/utils/huggingface-client';
+import { CombinedTaskList } from '@/utils/hf-client';
 import { SQLiteDatabase } from 'expo-sqlite';
 import uuid from 'react-native-uuid';
 import { createTask } from './taskService';

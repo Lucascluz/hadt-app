@@ -5,36 +5,49 @@ import { Input, InputField } from '@/components/ui/input';
 import { Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from '@/components/ui/select';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
 import { createTask } from '@/db/taskService';
-import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import uuid from 'react-native-uuid';
 import { useSQLiteContext } from 'expo-sqlite';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { getAllLists } from '@/db/listService';
+import { List } from '@/types/list';
 
 export default function TaskCreateModal() {
+
+    const database = useSQLiteContext();
+
+    const selectedListParam = useLocalSearchParams() as { listid: string };
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [completed, setCompleted] = useState(false);
-    const [list, setList] = useState('');
+    const [list, setList] = useState<string | null>();
 
     // State cleanup
     const [dueDate, setDueDate] = useState<Date | string>('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
+    const [listOptions, setListOptions] = useState<List[]>([]);
 
-    const database = useSQLiteContext();
+    useFocusEffect(
+        useCallback(() => {
+            const fetchLists = async () => {
+                const allLists = await getAllLists(database); // Assuming you have a function to get lists
+                setListOptions(allLists);
+            };
+            fetchLists();
 
-    useEffect(() => {
-        console.log("Title: ", title);
-        console.log("Description: ", description);
-        console.log("Completed: ", completed);
-        console.log("Due Date: ", dueDate);
-        console.log("List: ", list);
-        console.log("Created At: ", new Date().toISOString());
-    }
-        , [title, description, completed, dueDate, list]);
+            if(selectedListParam.listid) {
+                const selectedList = listOptions.find(list => list.id === selectedListParam.listid);
+                if (selectedList) {
+                    setList(selectedList.name);
+                }
+            }
+        }
+            , [database]) // Include database in dependencies
+    );
 
     // Creating the task
     const handleCreateTask = () => {
@@ -158,11 +171,7 @@ export default function TaskCreateModal() {
                             <SelectDragIndicatorWrapper>
                                 <SelectDragIndicator />
                             </SelectDragIndicatorWrapper>
-                            <SelectItem label="list1" value="list1" />
-                            <SelectItem label="list2" value="list2" />
-                            <SelectItem label="list3" value="list3" />
-                            <SelectItem label="list4" value="list4" />
-                            <SelectItem label="list5" value="list5" />
+
                         </SelectContent>
                     </SelectPortal>
                 </Select>

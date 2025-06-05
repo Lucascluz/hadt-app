@@ -1,11 +1,10 @@
-import { SortSelect } from '@/components/SortSelect';
+import { ViewModeSelect } from '@/components/ViewModeSelect';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonIcon } from '@/components/ui/button';
 import { Fab, FabIcon } from '@/components/ui/fab';
 import { HStack } from '@/components/ui/hstack';
 import { AddIcon, CheckIcon, ChevronDownIcon, ChevronUpIcon, Icon, StarIcon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
-import { Select, SelectTrigger, SelectInput, SelectIcon, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicatorWrapper, SelectDragIndicator, SelectItem } from '@/components/ui/select';
 import { VStack } from '@/components/ui/vstack';
 import { getAllTasks, updateTask } from '@/db/taskService';
 import { Task } from '@/types/task';
@@ -24,8 +23,9 @@ export default function Tab() {
     const database = useSQLiteContext();
 
     // Derive task states from the main tasks array
-    const completedTasks = tasks.filter(task => task.completed);
-    const pendingTasks = tasks.filter(task => !task.completed);
+    const todayTasks = tasks.filter(task => new Date(task.dueDate ?? 0).toDateString() === new Date().toDateString());
+    const completedTasks = todayTasks.filter(task => task.completed);
+    const pendingTasks = todayTasks.filter(task => !task.completed);
 
     useFocusEffect(
         useCallback(() => {
@@ -37,26 +37,24 @@ export default function Tab() {
         }, [database]) // Include database in dependencies
     );
 
-    const handleTaskOrderChange = async (order: string) => {
-        let orderedTasks = [...tasks];
-        switch (order) {
+    const handleViewModeChange = (value: string) => {
+        console.log("Selected view mode: ", value);
+        // Handle view mode change logic here
+        // For example, you can filter tasks based on the selected view mode
+        switch (value) {
             case '1':
-                orderedTasks.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+                setTasks(tasks.filter(task => new Date(task.dueDate ?? 0).toDateString() === new Date().toDateString()));
                 break;
             case '2':
-                orderedTasks.sort((a, b) => new Date(a.dueDate ?? 0).getTime() - new Date(b.dueDate ?? 0).getTime());
+                setTasks(tasks.filter(task => new Date(task.dueDate ?? 0).getTime() > new Date().getTime()));
                 break;
             case '3':
-                orderedTasks.sort((a, b) => new Date(a.createdAt ?? 0).getTime() - new Date(b.createdAt ?? 0).getTime());
-                break;
-            case '4':
-                orderedTasks.sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime());
+                setTasks(tasks.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0)));
                 break;
             default:
-                break;
+                setTasks(tasks.filter(task => new Date(task.dueDate ?? 0).toDateString() === new Date().toDateString()));
         }
-        setTasks(orderedTasks);
-    }
+    };
 
     const handleTaskCompletion = async (task: Task) => {
         const updatedTask = { ...task, completed: !task.completed };
@@ -72,8 +70,8 @@ export default function Tab() {
                 <Text className="text-3xl font-bold">Dash</Text>
             </View>
 
-            <View className='p-4'>
-                <SortSelect onSortChange={handleTaskOrderChange} />
+            <View className='px-4'>
+                <ViewModeSelect onViewModeChange={handleViewModeChange} />
             </View>
 
             <ScrollView className='w-full'>

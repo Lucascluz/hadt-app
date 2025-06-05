@@ -9,7 +9,7 @@ import { Task } from '@/types/task';
 import { List } from '@/types/list';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { getAllLists } from '@/db/listService';
 import { Fab, FabIcon } from '@/components/ui/fab';
@@ -24,10 +24,9 @@ export default function Tab() {
   const database = useSQLiteContext();
 
   // Derive task states from the main tasks array
-  const selectedListParam = useLocalSearchParams() as { listid: string };
-  const [selectedList, setSelectedList] = useState('');
-  const selectedListCompletedTasks = tasks.filter(task => task.completed && task.list === selectedList);
-  const selectedListPendingTasks = tasks.filter(task => !task.completed && task.list === selectedList);
+  const [selectedList, setSelectedList] = useState<string | null>(null);
+  const selectedListCompletedTasks = selectedList ? tasks.filter(task => task.completed && task.list === selectedList) : tasks.filter(task => task.completed);
+  const selectedListPendingTasks = selectedList ? tasks.filter(task => !task.completed && task.list === selectedList) : tasks.filter(task => !task.completed);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,9 +41,6 @@ export default function Tab() {
       fetchTasks();
       fetchLists();
 
-      if (selectedListParam) {
-        setSelectedList(selectedListParam.listid);
-      }
     }, [database]) // Include database in dependencies
   );
 
@@ -56,18 +52,22 @@ export default function Tab() {
     );
   };
 
-
   return (
     <SafeAreaView className='flex-1'>
-      <View className='p-4'>
-        <Text className="text-lg font-bold">Lists</Text>
+      <View className='justify-center items-center pt-4'>
+        <Text className="text-3xl font-bold">Tasks</Text>
       </View>
       <View>
 
-        <ScrollView className='' horizontal>
-          <HStack className='space-x-4'>
+        <ScrollView horizontal snapToAlignment='start' decelerationRate='fast'>
+          <HStack className='justify-between space-x-4 w-full'>
+            <Pressable className={`p-4 px-8 ${!selectedList && "bg-gray-200"} rounded-xl`} onPress={() => setSelectedList(null)}>
+              <HStack className='items-center justify-center'>
+                <Text className="text-lg font-bold"> All tasks </Text>
+              </HStack>
+            </Pressable>
             {lists.map((list) => (
-              <Pressable className={`p-4 px-8 ${list.id === selectedList && "bg-gray-200"}`} key={list.id} onPress={() => setSelectedList(list.id)}>
+              <Pressable className={`p-4 px-8 ${list.id === selectedList && "bg-gray-200"} rounded-xl`} key={list.id} onPress={() => setSelectedList(list.id)}>
                 <View>
                   <Text className="text-lg font-bold">{list.name}</Text>
                 </View>
@@ -76,14 +76,14 @@ export default function Tab() {
             <Pressable className={`p-4 px-8 `} onPress={() => router.push('/list/new')}>
               <HStack className='items-center justify-center'>
                 <Icon as={AddIcon} size='lg' className='text-black' />
-                <Text className="text-lg font-bold"> Nova Lista</Text>
+                <Text className="text-lg font-bold">New List</Text>
               </HStack>
             </Pressable>
           </HStack>
         </ScrollView>
       </View>
 
-      <ScrollView className='w-full'>
+      <ScrollView className='w-full' decelerationRate={'fast'} snapToAlignment='center'>
         {/* Pending Tasks Section */}
         <Box className='bg-white m-4 p-4 rounded-xl shadow-md'>
           <Pressable onPress={() => setShowPendingTasks(!showPendingTasks)}>
@@ -100,6 +100,10 @@ export default function Tab() {
                   key={task.id}
                   onPress={() => router.push({
                     pathname: '/task/[id]/index.',
+                    params: { id: task.id }
+                  })}
+                  onLongPress={() => router.push({
+                    pathname: '/list/[id]/index',
                     params: { id: task.id }
                   })}
                 >
@@ -170,7 +174,10 @@ export default function Tab() {
       <Fab
         className="absolute bottom-10 right-10"
         size="lg"
-        onPress={() => router.push('/task/new')}
+        onPress={() => router.push({
+          pathname: '/task/new',
+          params: { listid: selectedList }
+        })}
       >
         <FabIcon as={AddIcon} />
       </Fab>

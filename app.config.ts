@@ -2,6 +2,7 @@ import "dotenv/config";
 
 export default {
   expo: {
+    owner: "llussca",
     name: "hadt-app",
     slug: "hadt-app",
     version: "1.0.0",
@@ -14,6 +15,7 @@ export default {
       supportsTablet: true,
     },
     android: {
+      package: "com.llussca.hadt", 
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
@@ -43,6 +45,9 @@ export default {
     },
     extra: {
       hfToken: process.env.HF_TOKEN,
+      eas: {
+        projectId: "7929ff95-513d-407e-9b5d-c900da79f8c9"
+      }
     },
   },
 };

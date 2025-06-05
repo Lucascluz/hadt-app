@@ -1,11 +1,9 @@
-import { Fab, FabIcon } from '@/components/ui/fab';
-import { AddIcon } from '@/components/ui/icon';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { router, Tabs } from 'expo-router';
+import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: '#000', tabBarInactiveTintColor: '#888' }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -16,12 +14,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="lists"
+        name="tasks"
         options={{
           headerShown: false,
           animation: 'shift',
-          title: 'Lists',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="list" color={color} />,
+          title: 'Tasks',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="check" color={color} />,
         }}
       />
 

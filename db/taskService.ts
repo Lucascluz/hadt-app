@@ -49,17 +49,24 @@ export function updateTask(db: SQLiteDatabase, task: Task) {
     return db.runAsync(
         `UPDATE tasks SET title = ?, description = ?, completed = ?, dueDate = ?, late = ?, list = ? WHERE id = ?`,
         [
+            task.id,
             task.title ?? '',
             task.description ?? '',
             task.completed ? 1 : 0,
             task.dueDate ?? '',
             isTaskLate,
             task.list ?? '',
-            task.id,
+            task.updatedAt ?? new Date().toISOString(),
         ]
     );
 }
 
-export async function deleteTask(db: SQLiteDatabase, id: string) {
-    await db.runAsync(`DELETE FROM tasks WHERE id = ?`, [id]);
+export function deleteTask(db: SQLiteDatabase, task: Task) {
+
+    return db.runAsync(
+        `UPDATE tasks SET deleted = 1 WHERE id = ?`,
+        [
+            task.id,
+        ]
+    );
 }

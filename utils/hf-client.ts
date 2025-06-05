@@ -1,4 +1,4 @@
-import { InferenceClient, TextGenerationInput } from "@huggingface/inference";
+import { InferenceClient } from "@huggingface/inference";
 import Constants from "expo-constants";
 
 const hfToken = Constants.expoConfig?.extra?.hfToken as string;
@@ -63,6 +63,7 @@ JSON Response Format:
             "title": "Task title",
             "description": "Detailed task description",
             "dueDate": "ISO date"
+            "priority": "Task priority (1-5)"
         }
     ]
 }

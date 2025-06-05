@@ -4,7 +4,7 @@ export type Task = {
     description: string;
     completed: boolean;
     dueDate?: string; // data de vencimento da tarefa 
-    priority?: number | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10; // prioridade da tarefa (0-10)
+    priority?: number | 0 | 1 | 2 | 3 | 4 | 5 ; // prioridade da tarefa (0-10)
     late?: boolean; // se a tarefa está atrasada
     list?: string; // ID da lista a qual a tarefa pertence
     createdAt?: string; // data de criação da tarefa

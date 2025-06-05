@@ -1,50 +1,136 @@
-# Welcome to your Expo app 👋
+# HADT App (hadt-app)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform productivity application built with modern mobile and web technologies. This app leverages AI capabilities through Hugging Face, offers local data persistence, and features a user-friendly interface.
 
-## Get started
+## ✨ Key Features
 
-1. Install dependencies
+- **Cross-Platform:** Built with **Expo** for iOS, Android, and Web.
+- **Modern UI:** Styled with **Tailwind CSS** and **Gluestack UI** for a consistent and responsive user experience. (Assuming these are used based on previous context)
+- **File-Based Routing:** Utilizes **Expo Router** for intuitive navigation and typed routes.
+- **Local Data Storage:** Employs **expo-sqlite** for efficient on-device data persistence.
+- **AI Integration:** Connects to **Hugging Face Inference APIs** for advanced features, with API keys managed securely.
+- **TypeScript:** Ensures type safety and improved developer experience.
+- **New Architecture Enabled:** Leverages React Native's New Architecture for improved performance.
+- **Static Web Output:** Configured for static site generation for web deployment.
+- **Custom Splash Screen:** Configured with `expo-splash-screen`.
+- **Asset Management:** Uses `expo-asset` for handling static assets.
+
+## 🛠️ Tech Stack
+
+- **Core Framework:** **React Native** with **Expo SDK**
+- **Language:** **TypeScript**
+- **Navigation:** **Expo Router** (v3 with Typed Routes)
+- **State Management:** (Specify if any, e.g., Zustand, Redux, Context API)
+- **UI Components:** **Gluestack UI** (Assuming)
+- **Styling:** **Tailwind CSS** (via `nativewind` or similar - Assuming)
+- **Local Database:** **expo-sqlite**
+- **AI Integration:** **Hugging Face Inference API** (via `fetch` or a library)
+- **Environment Variables:** `dotenv` for managing secrets like `HF_TOKEN`.
+- **Build & Deployment:** EAS Build (implied by `eas.projectId`)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (LTS version recommended)
+- Yarn or npm
+- Expo CLI: `npm install -g expo-cli`
+- Git
+
+### Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone <your-repository-url>
+   cd hadt-app
+   ```
+
+2. **Install dependencies:**
 
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
+### Configuration
+
+1. **Set up Environment Variables:**
+
+   Create a `.env` file in the root of the project and add your Hugging Face API token:
+
+   ```env
+   // filepath: d:\Projetos\HADT\hadt-app\.env
+   HF_TOKEN="your_hugging_face_api_token_here"
+   ```
+
+   This token is used in `app.config.ts` via `process.env.HF_TOKEN`.
+
+### Running the App
+
+1. **Start the development server:**
 
    ```bash
-    npx expo start
+   npm start
+   # or
+   yarn start
+   # or
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+2. **Run on a device/emulator/simulator:**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - Scan the QR code with the Expo Go app on your iOS or Android device.
+   - Press `a` to run on an Android emulator or connected device.
+   - Press `i` to run on an iOS simulator or connected device.
+   - Press `w` to run in a web browser.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📜 Available Scripts
 
-## Get a fresh project
+In the project directory, you can run several commands:
 
-When you're ready, run:
+- `npm start` / `yarn start`: Runs the app in development mode using Expo.
+- `npm run android` / `yarn android`: Runs the app on a connected Android device or emulator.
+- `npm run ios` / `yarn ios`: Runs the app on an iOS simulator (requires macOS).
+- `npm run web` / `yarn web`: Runs the app in a web browser.
+- `npx expo prebuild`: Generates the native `android` and `ios` folders if you need to work with native code directly or build locally without EAS.
 
-```bash
-npm run reset-project
+(Add any other custom scripts you have)
+
+## 📁 Project Structure (Simplified)
+
+```
+hadt-app/
+├── app/                  # Expo Router: Files and folders here define routes
+│   ├── _layout.tsx       # Root layout
+│   ├── (tabs)/           # Example of a tab group
+│   │   ├── _layout.tsx
+│   │   └── index.tsx
+│   └── index.tsx         # Home screen
+├── assets/               # Static assets (images, fonts)
+│   └── images/
+├── components/           # Reusable UI components
+├── constants/            # Constant values (colors, styles, etc.)
+├── services/             # Services (e.g., API calls to Hugging Face)
+├── store/                # State management (if applicable)
+├── .env                  # Environment variables (Gitignored)
+├── app.config.ts         # Expo app configuration
+├── babel.config.js       # Babel configuration
+├── package.json
+└── tsconfig.json         # TypeScript configuration
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🤝 Contributing
 
-## Learn more
+Contributions are welcome! Please follow the standard fork, branch, and pull request workflow. Ensure your code adheres to the project's linting and formatting standards.
 
-To learn more about developing your project with Expo, look at the following resources:
+(Add more specific contribution guidelines if you have them)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📄 License
 
-## Join the community
+(Specify your license, e.g., MIT License. If you don't have one, consider adding one.)
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+_This README was generated with assistance from GitHub Copilot._

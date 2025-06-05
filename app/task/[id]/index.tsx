@@ -1,13 +1,12 @@
-import { Box } from '@/components/ui/box';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { CalendarDaysIcon, CheckIcon, ChevronDownIcon, ClockIcon, CloseIcon, TrashIcon } from '@/components/ui/icon';
 import { Input, InputField } from '@/components/ui/input';
 import { Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from '@/components/ui/select';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
-import { createTask, deleteTask, getTaskById, updateTask } from '@/db/taskService';
+import { deleteTask, getTaskById, updateTask } from '@/db/taskService';
 import { Text } from "@/components/ui/text"
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import uuid from 'react-native-uuid';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -99,7 +98,7 @@ export default function TaskManageModal() {
     const handleDeleteTask = () => {
         if (task) {
             console.log("Deleting task with id: ", task.id);
-            deleteTask(database, task.id).then(() => {
+            deleteTask(database, task).then(() => {
                 console.log("Task deleted successfully!");
                 router.back();
             }).catch((error) => {
