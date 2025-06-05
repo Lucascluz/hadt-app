@@ -125,6 +125,4 @@ hadt-app/
 
 Contributions are welcome! Please follow the standard fork, branch, and pull request workflow. Ensure your code adheres to the project's linting and formatting standards.
 
-(Add more specific contribution guidelines if you have them)
-
 _This README was generated with assistance from GitHub Copilot._
