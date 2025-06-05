@@ -127,10 +127,4 @@ Contributions are welcome! Please follow the standard fork, branch, and pull req
 
 (Add more specific contribution guidelines if you have them)
 
-## 📄 License
-
-(Specify your license, e.g., MIT License. If you don't have one, consider adding one.)
-
----
-
 _This README was generated with assistance from GitHub Copilot._
